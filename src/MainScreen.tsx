@@ -21,15 +21,13 @@ export default function MainScreen() {
 		if (month.length <= 0) {
 			return false
 		}
-		console.log(moment().month(), moment(month[month.length - 1].date).month())
-		if (moment().month() === moment(month[month.length - 1].date).month()) {
+		if (moment().month() !== moment(month[month.length - 1].date).month()) {
 			const value = await AsyncStorage.getItem("history")
 			const list = value == null ? [] : JSON.parse(value) as Array<{ diff: number, date: Date }>
 				list.push({
 					diff: amount,
 					date: moment().add(-1, "month").toDate()
 				})
-				console.log("HISTORY", JSON.stringify(list))
 			await AsyncStorage.setItem("history", JSON.stringify(list))
 			return true
 		}
@@ -38,7 +36,6 @@ export default function MainScreen() {
 
 	useEffect(() => {
 		AsyncStorage.getItem("amount").then(value => {
-			console.log("Incoming amount: ", value)
 			if (value != null && !isNaN(value as unknown as number)) {
 				setAmount(parseInt(value))
 			}
@@ -55,7 +52,6 @@ export default function MainScreen() {
 			}
 
 			isNewMonth().then(newMonth => {
-				console.log("ITEM REMOVED", newMonth)
 				if (newMonth) {
 					setAmount(0)
 					setMonth([])
@@ -86,7 +82,6 @@ export default function MainScreen() {
 
 		const diff = parseInt(inputField) * (isIncome ? 1 : -1)
 
-		console.log(amount, inputField, isIncome)
 		const newAmount = amount + diff
 		setAmount(newAmount)
 		month.unshift({
@@ -98,7 +93,6 @@ export default function MainScreen() {
 		setInputField("")
 		setInputActive(false)
 
-		console.log("Setting amount: ", newAmount)
 		AsyncStorage.setItem("amount", newAmount.toString())
 		AsyncStorage.setItem("month", JSON.stringify(month))
 	}

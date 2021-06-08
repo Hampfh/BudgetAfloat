@@ -21,8 +21,6 @@ export default function HistoryScreen() {
 		})
 	}, [])
 
-	console.log("history", history)
-
 	return (
 		<View style={{
 			height: "100%",
